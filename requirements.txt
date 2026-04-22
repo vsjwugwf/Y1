@@ -1,0 +1,4 @@
+scrapetube>=2.4.0
+yt-dlp>=2023.0.0
+tubescrape
+aiohttp
