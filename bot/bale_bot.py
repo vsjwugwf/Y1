@@ -24,17 +24,14 @@ from telegram.constants import ParseMode
 # مغز پردازشی (در گام بعدی ساخته می‌شود)
 # فرض می‌کنیم core/A.py کلاسی به نام YouTubeEngine با متدهای search و download دارد.
 sys.path.append(str(Path(__file__).parent.parent))  # افزودن ریشه پروژه به مسیر پایتون
+# جایگزین بخش try/except قبلی با این:
 try:
     from core.A import YouTubeEngine
-except ImportError:
-    # در صورتی که هنوز core/A.py وجود نداشته باشد، یک نمونه موقت قرار می‌دهیم.
-    class YouTubeEngine:
-        async def search(self, query: str) -> List[dict]:
-            return [{"title": "نمونه ویدیو", "url": "https://youtu.be/dQw4w9WgXcQ"}]
-        async def download(self, url: str) -> Tuple[str, str]:
-            return ("/tmp/sample.mp4", "Sample Video.mp4")
-    logging.warning("core.A یافت نشد، از نمونه موقت استفاده می‌شود.")
-
+except ImportError as e:
+    logger.critical(f"❌ خطای بحرانی در بارگذاری core.A: {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)  # مستقیم خارج شو تا اکشن فیل بشه و ما بفهمیم مشکل چیه
 # تنظیمات لاگ
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
